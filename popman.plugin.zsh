@@ -26,15 +26,23 @@ popman() {
   BUFFER=""
 
   local cmds=$(extract_commands "$curr_buffer")
+  local cmd_count=$(echo "$cmds" | wc -l)
 
-  if [[ -z $curr_buffer ]]; then
-    echo "hi"
+  if [ "$cmd_count" -eq 0 ]; then
     return;
   fi
 
   zle redisplay
 
-  local choice=$(echo "$cmds" | fzf)
+  echo "$cmds"
+
+  local choice
+  if [ "$cmd_count" -eq 1 ]; then
+    choice=$(echo "$cmds" | head -n 1)
+  else
+    # TODO: This should happen in the tmux popup instead of direcly in the buffer
+    choice=$(echo "$cmds" | fzf)
+  fi
   if [ "${TMUX}" ]; then
     tmux popup -EE -h 90% -w 90% man "$choice"
   else
