@@ -41,7 +41,7 @@ popman() {
     choice=$(echo "$cmds" | head -n 1)
   else
     # TODO: This should happen in the tmux popup instead of direcly in the buffer
-    choice=$(echo "$cmds" | fzf --layout=reverse)
+    choice=$(echo "$cmds" | fzf --layout=reverse --prompt="Select the tool you need help with: ")
   fi
   if [ "${TMUX}" ]; then
     tmux popup -EE -h 90% -w 90% man "$choice"
