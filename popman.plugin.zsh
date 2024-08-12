@@ -23,7 +23,6 @@ extract_commands() {
 
 popman() {
   local curr_buffer=$BUFFER
-  BUFFER=""
 
   local cmds=$(extract_commands "$curr_buffer")
   local cmd_count=$(echo "$cmds" | wc -l)
@@ -31,8 +30,6 @@ popman() {
   if [ "$cmd_count" -eq 0 ]; then
     return;
   fi
-
-  zle redisplay
 
   local choice
   if [ "$cmd_count" -eq 1 ]; then
@@ -44,6 +41,8 @@ popman() {
   if [ "${TMUX}" ]; then
     tmux popup -EE -h 90% -w 90% man "$choice"
   else
+    BUFFER=""
+    zle redisplay
     man "$choice"
   fi
 
